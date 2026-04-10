@@ -54,3 +54,16 @@ where attraction_id = 8;
 update dim_attraction
 set attraction_id = 6
 where attraction_id = 8;
+
+/* Summarizing the changes made:
+1. Standardized the attraction names in the dim_attraction table by converting them to title case and trimming any leading or trailing spaces.
+2. Updated the fact_ride_events table to remap ride events from duplicate attraction IDs to the canonical IDs.
+3. Deleted the duplicate attractions from the dim_attraction table.
+4. Updated the remaining attraction_id in both tables to maintain a continuous sequence.
+5. Verified the changes by selecting all records from the dim_attraction table to ensure that the duplicates have been removed and the names are standardized. */
+
+/* Why these changes matter: Before this fix, the operation manager looking at the ride fatisfaction would see "Galaxy Coaster" with (say) 15 rides events and "galaxy coaster"
+with say 10 rides events and might think there are two different attractions, when in reality they are the same attraction with different name variations.
+This could lead to confusion and inaccurate analysis of ride performance. By standardizing the names and removing duplicates, we ensure that all ride events are correctly attributed to the same attraction,
+providing a clearer picture of its performance and allowing for more accurate decision-making. 
+Before any staffing and maintenance decisions I made was on ride popularity was built on split data */
