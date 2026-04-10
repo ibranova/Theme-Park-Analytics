@@ -41,4 +41,16 @@ update dim_attraction
 set attraction_name = 'Pirate Splash'
 where attraction_id = 2;
 
+-- Verification of the changes made to the dim_attraction table:
+SELECT * FROM dim_attraction ORDER BY attraction_id;
 
+/* After removing the duplicate attraction, I noticed I have a gap in the attraction_id sequence,
+so I will update the remaining attraction_id to fill the gap and maintain a continuous sequence. */
+update fact_ride_events
+set attraction_id = 6
+where attraction_id = 8;
+
+/* Now let's update the attraction_id in the dim_attraction table to fill the gap as well. */
+update dim_attraction
+set attraction_id = 6
+where attraction_id = 8;
