@@ -67,3 +67,24 @@ with say 10 rides events and might think there are two different attractions, wh
 This could lead to confusion and inaccurate analysis of ride performance. By standardizing the names and removing duplicates, we ensure that all ride events are correctly attributed to the same attraction,
 providing a clearer picture of its performance and allowing for more accurate decision-making. 
 Before any staffing and maintenance decisions I made was on ride popularity was built on split data */
+
+-- Now, marketing option column is not normalized, and should be an integer instead of a string
+-- let's normalize marketing_opt_in to a clean 1/0 integer by creating a new column, populating it based on the existing values, and then dropping the old column.
+ALTER TABLE dim_guest ADD COLUMN marketing_opt_in_clean INTEGER;
+
+UPDATE dim_guest
+SET marketing_opt_in_clean = CASE
+  WHEN UPPER(TRIM(COALESCE(marketing_opt_in, ''))) IN ('YES', 'Y') THEN 1
+  WHEN UPPER(TRIM(COALESCE(marketing_opt_in, ''))) IN ('NO', 'N') THEN 0
+  ELSE NULL  
+END;
+
+-- Now, let's drop the old marketing_opt_in column and rename the new column to marketing_opt_in.
+ALTER TABLE dim_guest DROP COLUMN marketing_opt_in;
+ALTER TABLE dim_guest RENAME COLUMN marketing_opt_in_clean TO marketing_opt_in;
+
+select * from dim_guest;
+
+/* Summary: This change realy matter because the marketing director cannot segments guests 
+for email campaigns if they have many different speling of marketing preferences. With this change they can 
+easily understand to which guests they can send marketing emails and which they cannot, leading to more effective marketing campaigns */
