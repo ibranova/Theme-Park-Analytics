@@ -35,3 +35,18 @@ CREATE TABLE dim_date_ (
   is_weekend INTEGER NOT NULL CHECK (is_weekend IN (0, 1)),
   season     TEXT NOT NULL
 );
+
+-- Now, let's create the fact table with foreign key constraints referencing the dimension tables:
+CREATE TABLE fact_visits(
+  visit_id           INTEGER PRIMARY KEY,
+  guest_id           INTEGER NOT NULL REFERENCES dim_guest(guest_id),
+  ticket_type_id     INTEGER NOT NULL REFERENCES dim_ticket(ticket_type_id),
+  date_id            INTEGER NOT NULL REFERENCES dim_date_(date_id),
+  visit_date         TEXT NOT NULL,
+  party_size         INTEGER,
+  entry_time         TEXT NOT NULL,
+  exit_time          TEXT NOT NULL,
+  spend_cents_clean  INTEGER,
+  promotion_code_norm TEXT
+);
+
