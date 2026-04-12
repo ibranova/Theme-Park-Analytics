@@ -68,3 +68,9 @@ CREATE TABLE fact_purchases (
   amount_cents       INTEGER CHECK (amount_cents > 0),
   payment_method     TEXT
 );
+
+/* Summary of the schema design:
+1. Created dimension tables: dim_guest, dim_ticket, dim_attraction, and dim_date_ with appropriate columns and primary keys. The attraction_name in dim_attraction is set to UNIQUE to prevent future duplicates.
+2. Created fact tables: fact_visits, fact_ride_events, and fact_purchases with foreign key constraints referencing the dimension tables to ensure referential integrity.
+3. Added necessary constraints such as CHECK constraints to ensure data quality and consistency across the tables. 
+4. This schema design allows for efficient querying and analysis of the theme park data while maintaining data integrity through the use of foreign keys and constraints. */
