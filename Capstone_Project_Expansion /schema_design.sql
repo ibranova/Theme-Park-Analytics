@@ -50,3 +50,21 @@ CREATE TABLE fact_visits(
   promotion_code_norm TEXT
 );
 
+CREATE TABLE fact_ride_events (
+  ride_event_id       INTEGER PRIMARY KEY,
+  visit_id            INTEGER NOT NULL REFERENCES fact_visits(visit_id),
+  attraction_id       INTEGER NOT NULL REFERENCES dim_attraction(attraction_id),
+  ride_time           TEXT NOT NULL,
+  wait_minutes        INTEGER CHECK (wait_minutes >= 0 OR wait_minutes IS NULL),
+  satisfaction_rating INTEGER CHECK (satisfaction_rating BETWEEN 1 AND 5),
+  photo_purchase      TEXT CHECK (photo_purchase IN ('Y', 'N') OR photo_purchase IS NULL)
+);
+
+CREATE TABLE fact_purchases (
+  purchase_id        INTEGER PRIMARY KEY,
+  visit_id           INTEGER NOT NULL REFERENCES fact_visits(visit_id),
+  category           TEXT NOT NULL CHECK (category IN ('Food', 'Merch')),
+  item_name          TEXT NOT NULL,
+  amount_cents       INTEGER CHECK (amount_cents > 0),
+  payment_method     TEXT
+);
