@@ -15,7 +15,7 @@ LEFT JOIN (
 GROUP BY w.condition_code
 ORDER BY avg_daily_visits DESC;
 
--- Q2: Do guests spend more on rainy days (captive audience → more food/merch)?
+-- Q2: Do guests spend more on rainy days?
 SELECT
   w.condition_code,
   ROUND(AVG(p.amount_cents_clean / 100.0)) AS avg_purchase_usd,
@@ -51,7 +51,7 @@ JOIN dim_attraction a ON a.attraction_id = m.attraction_id
 GROUP BY a.attraction_name, m.maintenance_type
 ORDER BY total_downtime_min DESC;
 
--- Q5: Does unscheduled maintenance correlate with lower satisfaction that day?
+-- Q5: Does unscheduled maintenance correlate with lower satisfaction?
 WITH maintenance_days AS (
   SELECT DISTINCT date_id, attraction_id
   FROM fact_maintenance
@@ -60,7 +60,6 @@ WITH maintenance_days AS (
 SELECT
   CASE WHEN md.date_id IS NOT NULL THEN 'Maintenance Day' ELSE 'Normal Day' END AS day_type,
   ROUND(AVG(re.satisfaction_rating)) AS avg_satisfaction,
-  ROUND(AVG(re.wait_minutes)) AS avg_wait,
   COUNT(*) AS ride_events
 FROM fact_ride_events re
 JOIN fact_visits v ON v.visit_id = re.visit_id
