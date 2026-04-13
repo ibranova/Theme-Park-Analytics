@@ -28,7 +28,7 @@ CREATE TABLE dim_attraction (
   opened_date      TEXT
 );
 
-CREATE TABLE dim_date_ (
+CREATE TABLE dim_date (
   date_id    INTEGER PRIMARY KEY,
   date_iso   TEXT NOT NULL UNIQUE,
   day_name   TEXT NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE fact_visits(
   visit_id           INTEGER PRIMARY KEY,
   guest_id           INTEGER NOT NULL REFERENCES dim_guest(guest_id),
   ticket_type_id     INTEGER NOT NULL REFERENCES dim_ticket(ticket_type_id),
-  date_id            INTEGER NOT NULL REFERENCES dim_date_(date_id),
+  date_id            INTEGER NOT NULL REFERENCES dim_date(date_id),
   visit_date         TEXT NOT NULL,
   party_size         INTEGER,
   entry_time         TEXT NOT NULL,
